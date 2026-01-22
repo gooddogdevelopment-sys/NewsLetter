@@ -1,48 +1,26 @@
-﻿name: Build and Deploy Newsletter
+﻿name: Daily Newsletter
 
 on:
-  push:
-    branches: [ "main" ]
-
-env:
-  PROJECT_ID: your-gcp-project-id
-  REGION: us-central1
-  REPOSITORY: newsletter-repo
-  IMAGE_NAME: daily-worker
-  JOB_NAME: newsletter-job
+  schedule:
+    - cron: '0 14 * * 1-5' # Runs at 9:00 AM EST, Mon-Fri
+  workflow_dispatch:      # ALLOWS MANUAL TRIGGER FOR TESTING
 
 jobs:
-  deploy:
+  run-and-persist:
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write' # Required for Workload Identity Federation
+      contents: read     # Required to push the DB changes back to the repo
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Google Auth
-        uses: google-github-actions/auth@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          # This uses WIF instead of a static JSON key
-          workload_identity_provider: 'projects/123/locations/global/workloadIdentityPools/my-pool/providers/github'
-          service_account: 'github-actions-sa@your-gcp-project.iam.gserviceaccount.com'
+          dotnet-version: '10.0.x'
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Configure Docker
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
-
-      - name: Build and Push Container
-        run: |
-          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-      - name: Deploy Cloud Run Job
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          job: ${{ env.JOB_NAME }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          region: ${{ env.REGION }}
+      - name: Run Application
+        run: dotnet run --project YourProject.csproj
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          EMAIL_API_KEY: ${{ secrets.EMAIL_API_KEY }}
