@@ -1,6 +1,4 @@
-﻿using GenerativeAI.Models;
-using Google.GenAI;
-using Microsoft.Extensions.Logging;
+﻿using Google.GenAI;
 
 namespace NewsLetter.AiProviders;
 

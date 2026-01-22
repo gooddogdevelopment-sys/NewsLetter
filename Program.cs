@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using NewsLetter;
 using NewsLetter.AiProviders;
-using Quartz;
 using Resend;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -26,4 +25,7 @@ builder.Services.AddScoped<IGeminiContentProvider>(_ => new GeminiContentProvide
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 var host = builder.Build();
-host.Run();
+
+using var scope = host.Services.CreateScope();
+var job = scope.ServiceProvider.GetRequiredService<NewsLetterJob>();
+await job.Execute();

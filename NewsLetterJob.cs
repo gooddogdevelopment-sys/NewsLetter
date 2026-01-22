@@ -1,11 +1,10 @@
 ﻿using NewsLetter.AiProviders;
-using Quartz;
 
 namespace NewsLetter;
 
-public class NewsLetterJob (IEmailService emailService, IPromptService promptService, IGeminiContentProvider geminiProvider): IJob
+public class NewsLetterJob (IEmailService emailService, IPromptService promptService, IGeminiContentProvider geminiProvider)
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async Task Execute()
     {
         var prompt = promptService.GetNewsLetterPrompt();
         var responseContent = await geminiProvider.GenerateContent("gemini-2.5-flash", prompt);

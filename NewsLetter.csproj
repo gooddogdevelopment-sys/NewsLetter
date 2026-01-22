@@ -23,12 +23,8 @@
 
     <ItemGroup>
       <PackageReference Include="Google.GenAI" Version="0.13.0" />
-      <PackageReference Include="LangChain" Version="0.17.0" />
       <PackageReference Include="LangChain.Extensions.DependencyInjection" Version="0.17.0" />
-      <PackageReference Include="LangChain.Providers.Google" Version="0.17.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
-      <PackageReference Include="Microsoft.SemanticKernel" Version="1.69.0" />
-      <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.1" />
       <PackageReference Include="Resend" Version="0.2.1" />
     </ItemGroup>
 
