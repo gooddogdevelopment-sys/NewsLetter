@@ -10,21 +10,8 @@ var builder = Host.CreateApplicationBuilder(args);
 var geminiApiKey = builder.Configuration["GEMINI_API_KEY"] 
                    ?? throw new InvalidOperationException("Gemini API Key is missing.");
 
-builder.Services.AddQuartz(q =>
-{
-    var jobKey = new JobKey("NewsletterJob");
-    q.AddJob<NewsLetterJob>(opts => opts.WithIdentity(jobKey));
+builder.Services.AddScoped<NewsLetterJob>();
 
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithIdentity("NewsletterTrigger")
-        // .StartNow()
-        // .WithCronSchedule("0 0 9 ? * MON-FRI") // 9 AM Monday-Friday
-        .WithCronSchedule("0 * * ? * *") // every minute at second 0
-        ); 
-});
-
-builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.Configure<ResendClientOptions>(options =>
 {
