@@ -7,7 +7,7 @@ using Resend;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-var geminiApiKey = builder.Configuration["GeminiApiKey"] 
+var geminiApiKey = builder.Configuration["GEMINI_API_KEY"] 
                    ?? throw new InvalidOperationException("Gemini API Key is missing.");
 
 builder.Services.AddQuartz(q =>
@@ -28,7 +28,7 @@ builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.Configure<ResendClientOptions>(options =>
 {
-    options.ApiToken = builder.Configuration["SendGridApiKey"]
+    options.ApiToken = builder.Configuration["EMAIL_API_KEY"]
                        ?? throw new KeyNotFoundException("Email api key not found");
 });
 
