@@ -1,0 +1,48 @@
+﻿name: Build and Deploy Newsletter
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  PROJECT_ID: your-gcp-project-id
+  REGION: us-central1
+  REPOSITORY: newsletter-repo
+  IMAGE_NAME: daily-worker
+  JOB_NAME: newsletter-job
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write' # Required for Workload Identity Federation
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          # This uses WIF instead of a static JSON key
+          workload_identity_provider: 'projects/123/locations/global/workloadIdentityPools/my-pool/providers/github'
+          service_account: 'github-actions-sa@your-gcp-project.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build and Push Container
+        run: |
+          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Deploy Cloud Run Job
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          job: ${{ env.JOB_NAME }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          region: ${{ env.REGION }}
