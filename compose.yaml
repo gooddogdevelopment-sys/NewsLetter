@@ -1,0 +1,6 @@
+﻿services:
+  newsletter:
+    image: newsletter
+    build:
+      context: .
+      dockerfile: NewsLetter/Dockerfile

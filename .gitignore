@@ -1,0 +1,64 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+## Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug*/
+[Rr]elease*/
+x64/
+x86/
+[Aa]ny [Cc]PU/
+[Aa]nyCPU/
+
+## VS / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+**/nuget.config.user
+
+## Logs
+*.log
+
+## OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Test / coverage
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+## Publish output
+**/publish/
+**/app.publish/
+
+## Docker / compose local overrides
+docker-compose.override.yml
+compose.override.yaml
+compose.override.yml
+
+## Secrets (IMPORTANT)
+**/appsettings.*.json
+**/secrets.json
+**/*secrets*.json
+**/*.pfx
+**/*.pem
+**/*.key
+**/.env
+appsettings.json
