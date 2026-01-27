@@ -1,10 +1,11 @@
 ﻿using Resend;
 
-namespace NewsLetter;
+namespace NewsLetter.Services;
 
 public interface IEmailService
 {
     Task SendEmailAsync(string to, string subject, string body, string from);
+    Task<string> ConvertToHtml(object outline);
 }
 
 public class EmailService (IResend resendClient) : IEmailService
@@ -22,10 +23,14 @@ public class EmailService (IResend resendClient) : IEmailService
 
         Console.WriteLine(resp.Success ? "Successful Email Send" : "Failed Email Send");
     }
+    
+    public async Task<string> ConvertToHtml(object outline)
+    {
+        var templateText = await File.ReadAllTextAsync("Templates/DotNetEmailTemplate.html");
+        var template = Scriban.Template.Parse(templateText);
+        
+        var result = await template.RenderAsync(outline);
+        return result;
+    }
 }
 
-public class EmailServiceOptions
-{
-    public required string FromEmail { get; set; } 
-    public required string ToEmail { get; set; }
-}

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using NewsLetter;
 using NewsLetter.AiProviders;
+using NewsLetter.Models;
+using NewsLetter.Services;
 using Quartz;
 using Resend;
 
@@ -24,10 +26,10 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
             .ForJob(jobKey)
             .WithIdentity("NewsletterTrigger")
-            // .StartNow()
+            .StartNow()
             // .WithCronSchedule("0 0 9 ? * MON-FRI") // 9 AM Monday-Friday
-            .WithCronSchedule("0 * * ? * *") // every minute at second 0
-    ); 
+            // .WithCronSchedule("0 * * ? * *") // every minute at second 0
+    );
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
@@ -38,9 +40,6 @@ builder.Services.AddScoped<IPromptService, PromptService>();
 builder.Services.Configure<EmailServiceOptions>(builder.Configuration.GetSection("Email"));
 builder.Services.AddScoped<IGeminiContentProvider>(_ => new GeminiContentProvider(geminiApiKey));
 builder.Services.AddScoped<IEmailService, EmailService>();
-
-
-
 
 var host = builder.Build();
 host.Run();
