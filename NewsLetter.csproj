@@ -21,6 +21,7 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
       <PackageReference Include="Resend" Version="0.2.1" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.1" />
+        <PackageReference Include="Scriban" Version="6.5.2" />
 
 
     </ItemGroup>
@@ -29,6 +30,9 @@
       <None Update="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+        <None Update="Templates\DotNetEmailTemplate.html">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
