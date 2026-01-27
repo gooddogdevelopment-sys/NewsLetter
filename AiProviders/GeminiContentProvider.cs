@@ -15,6 +15,7 @@ public class GeminiContentProvider(string apiKey) : IGeminiContentProvider
     {
         try
         {
+            Console.WriteLine("Generating content");
             var response = await _client.Models.GenerateContentAsync(model, prompt);
             var responseText = response.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
             if (responseText is null) throw new NullReferenceException("No content in Gemini response body");
