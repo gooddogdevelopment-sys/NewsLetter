@@ -3,4 +3,4 @@
     image: newsletter
     build:
       context: .
-      dockerfile: NewsLetter/Dockerfile
+      dockerfile: Dockerfile

@@ -5,10 +5,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["NewsLetter/NewsLetter.csproj", "NewsLetter/"]
-RUN dotnet restore "NewsLetter/NewsLetter.csproj"
+COPY ["NewsLetter.csproj", "."]
+RUN dotnet restore "NewsLetter.csproj"
 COPY . .
-WORKDIR "/src/NewsLetter"
+WORKDIR "/src"
 RUN dotnet build "NewsLetter.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
