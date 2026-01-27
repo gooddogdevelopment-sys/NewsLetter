@@ -26,8 +26,8 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
             .ForJob(jobKey)
             .WithIdentity("NewsletterTrigger")
-            .StartNow()
-            // .WithCronSchedule("0 0 9 ? * MON-FRI") // 9 AM Monday-Friday
+            // .StartNow()
+            .WithCronSchedule("0 0 9 ? * MON-FRI") // 9 AM Monday-Friday
             // .WithCronSchedule("0 * * ? * *") // every minute at second 0
     );
 });
