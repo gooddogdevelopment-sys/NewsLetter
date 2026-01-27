@@ -16,16 +16,23 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Google.GenAI" Version="0.13.0" />
       <PackageReference Include="LangChain.Extensions.DependencyInjection" Version="0.17.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
       <PackageReference Include="Resend" Version="0.2.1" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.1" />
+
+
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="src\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
