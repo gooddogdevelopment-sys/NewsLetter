@@ -10,6 +10,11 @@ public class NewsLetterJob (IEmailService emailService, IPromptService promptSer
 {
     public async Task Execute(IJobExecutionContext context)
     {
+        await SendAsync();
+    }
+
+    public async Task SendAsync()
+    {
         var prompt = promptService.GetNewsLetterPrompt();
         var responseContent = await geminiProvider.GenerateCodingNewsletterContent(prompt);
         var emailBody = await emailService.ConvertToHtml(responseContent);
