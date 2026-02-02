@@ -14,7 +14,7 @@ var geminiApiKey = builder.Configuration["GEMINI_API_KEY"]
 
 builder.Services.Configure<ResendClientOptions>(options =>
 {
-    options.ApiToken = builder.Configuration["Email:EmailApiKey"]
+    options.ApiToken = builder.Configuration["EMAIL_API_KEY"]
                        ?? throw new KeyNotFoundException("Email api key not found");
 });
 
@@ -26,7 +26,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
             .ForJob(jobKey)
             .WithIdentity("NewsletterTrigger")
-            // .StartNow()
+            .StartNow()
             .WithCronSchedule("0 0 9 ? * MON-FRI") // 9 AM Monday-Friday
             // .WithCronSchedule("0 * * ? * *") // every minute at second 0
     );
@@ -37,7 +37,11 @@ builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 builder.Services.AddHttpClient<IResend, ResendClient>();
 
 builder.Services.AddScoped<IPromptService, PromptService>();
-builder.Services.Configure<EmailServiceOptions>(builder.Configuration.GetSection("Email"));
+builder.Services.Configure<EmailServiceOptions>(options =>
+{
+    options.FromEmail = builder.Configuration["FROM_EMAIL"] ?? throw new InvalidOperationException("No FROM_EMAIL detected");
+    options.ToEmail = builder.Configuration["TO_EMAIL"] ?? throw new InvalidOperationException("No TO_EMAIL detected");
+});
 builder.Services.AddScoped<IGeminiContentProvider>(_ => new GeminiContentProvider(geminiApiKey));
 builder.Services.AddScoped<IEmailService, EmailService>();
 
