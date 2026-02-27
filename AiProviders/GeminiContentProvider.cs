@@ -47,6 +47,7 @@ public class GeminiContentProvider(string apiKey) : IGeminiContentProvider
         var config = new GenerateContentConfig
         {
             ResponseMimeType = "application/json",
+            Temperature = 0.9,
             ResponseSchema = new Schema
             {
                 Type = Type.OBJECT,

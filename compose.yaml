@@ -1,6 +1,28 @@
 ﻿services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_USER=newsletter_user
+      - POSTGRES_PASSWORD=secure_pass_123
+      - POSTGRES_DB=newsletter_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U newsletter_user -d newsletter_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   newsletter:
     image: newsletter
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=newsletter_db;Username=newsletter_user;Password=secure_pass_123
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - EMAIL_API_KEY=${EMAIL_API_KEY}
+      - FROM_EMAIL=${FROM_EMAIL}
+      - TO_EMAIL=${TO_EMAIL}

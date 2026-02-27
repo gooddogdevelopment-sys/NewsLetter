@@ -6,7 +6,13 @@ using Quartz;
 
 namespace NewsLetter;
 
-public class NewsLetterJob (IEmailService emailService, IPromptService promptService, IGeminiContentProvider geminiProvider, IOptions<EmailServiceOptions> options): IJob
+public class NewsLetterJob (
+    IEmailService emailService, 
+    IPromptService promptService,
+    INewsLetterService newsLetterService,
+    IGeminiContentProvider geminiProvider, 
+    IOptions<EmailServiceOptions> options
+    ): IJob
 {
     public async Task Execute(IJobExecutionContext context)
     {
@@ -15,15 +21,35 @@ public class NewsLetterJob (IEmailService emailService, IPromptService promptSer
 
     public async Task SendAsync()
     {
-        var prompt = promptService.GetNewsLetterPrompt();
-        var responseContent = await geminiProvider.GenerateCodingNewsletterContent(prompt);
-        var emailBody = await emailService.ConvertToHtml(responseContent);
-        await emailService.SendEmailAsync
-        (
-            options.Value.ToEmail,
-            "Daily Dev Tip",
-            emailBody,
-            options.Value.FromEmail
-        );
+        try
+        {
+            var prompt = promptService.GetNewsLetterPrompt();
+            var responseContent = await geminiProvider.GenerateCodingNewsletterContent(prompt);
+            var emailBody = await emailService.ConvertToHtml(responseContent);
+            await emailService.SendEmailAsync
+            (
+                options.Value.ToEmail,
+                "Daily Dev Tip",
+                emailBody,
+                options.Value.FromEmail
+            );
+
+            await newsLetterService.AddNewsletterAsync(
+                new Newsletter
+            {
+                Title = responseContent.Title,
+                CodeSnippet = responseContent.CodeSnippet,
+                Overview = responseContent.Overview,
+                Subject = "Daily Dev Tip", //TODO: Make this configurable
+                SendDate = default,
+                AiProvider = "GEMINI", //TODO: Make this configurable
+                AiModel = "gemini-3-flash-preview" //TODO: Make this configurable
+            });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
     }
 }

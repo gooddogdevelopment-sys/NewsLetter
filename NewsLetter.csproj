@@ -18,7 +18,13 @@
     <ItemGroup>
       <PackageReference Include="Google.GenAI" Version="0.13.0" />
       <PackageReference Include="LangChain.Extensions.DependencyInjection" Version="0.17.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
       <PackageReference Include="Resend" Version="0.2.1" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.15.1" />
         <PackageReference Include="Scriban" Version="6.5.2" />
@@ -33,6 +39,10 @@
         <None Update="Templates\DotNetEmailTemplate.html">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Database\Migrations\" />
     </ItemGroup>
 
 </Project>
