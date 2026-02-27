@@ -22,6 +22,7 @@ jobs:
       - name: Run Application
         run: dotnet run --project NewsLetter.csproj
         env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           EMAIL_API_KEY: ${{ secrets.EMAIL_API_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
