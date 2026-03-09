@@ -48,6 +48,10 @@ public class GeminiContentProvider(string apiKey) : IGeminiContentProvider
         {
             ResponseMimeType = "application/json",
             Temperature = 0.9,
+            HttpOptions = new HttpOptions
+            {
+                Timeout = 250
+            },
             ResponseSchema = new Schema
             {
                 Type = Type.OBJECT,
