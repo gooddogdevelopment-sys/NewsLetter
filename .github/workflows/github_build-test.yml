@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./NewsLetter
+        working-directory: ${{ github.workspace }}/NewsLetter
     services:
       db:
         image: postgres:17-alpine
