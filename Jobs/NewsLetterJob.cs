@@ -41,7 +41,7 @@ public class NewsLetterJob (
                 CodeSnippet = responseContent.CodeSnippet,
                 Overview = responseContent.Overview,
                 Subject = "Daily Dev Tip", //TODO: Make this configurable
-                SendDate = default,
+                SendDate = DateTime.UtcNow,
                 AiProvider = "GEMINI", //TODO: Make this configurable
                 AiModel = "gemini-3-flash-preview" //TODO: Make this configurable
             });
