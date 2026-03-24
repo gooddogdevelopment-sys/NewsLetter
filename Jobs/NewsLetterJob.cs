@@ -4,7 +4,7 @@ using NewsLetter.Models;
 using NewsLetter.Services;
 using Quartz;
 
-namespace NewsLetter;
+namespace NewsLetter.Jobs;
 
 public class NewsLetterJob (
     IEmailService emailService, 

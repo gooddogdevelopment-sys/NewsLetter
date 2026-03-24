@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using NewsLetter;
 using NewsLetter.AiProviders;
 using NewsLetter.Database;
+using NewsLetter.Jobs;
 using NewsLetter.Models;
 using NewsLetter.Services;
 using Resend;
