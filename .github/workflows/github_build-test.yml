@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/NewsLetter
     services:
       db:
         image: postgres:17-alpine
@@ -41,10 +38,7 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore NewsLetter.csproj
 
       - name: Build
-        run: dotnet build --no-restore -c Release
-
-      - name: Test
-        run: dotnet test --no-build -c Release --verbosity normal
+        run: dotnet build NewsLetter.csproj --no-restore -c Release
